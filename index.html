@@ -253,75 +253,77 @@
 
     </main>
 
-    <!-- Modal Guide / Panduan -->
-<div id="guideModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
-        <!-- Header Modal -->
-        <div class="p-6 border-b border-slate-800/80 flex justify-between items-start">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-lg">
-                    <i class="fa-solid fa-book-open"></i>
+    <!-- Modal Panduan Export JSON -->
+    <div id="guideModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-100">Panduan Download Data JSON Instagram</h3>
+                        <p class="text-xs text-slate-400">Ikuti langkah mudah ini dari aplikasi Instagram HP / Browser</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-lg font-bold text-slate-100">Panduan Download Data JSON Instagram</h3>
-                    <p class="text-xs text-slate-400">Ikuti langkah mudah ini dari aplikasi Instagram HP / Browser</p>
-                </div>
-            </div>
-            <button onclick="toggleGuideModal(false)" class="text-slate-400 hover:text-slate-200 text-lg p-1">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <!-- Body Modal -->
-        <div class="p-6 overflow-y-auto space-y-4 text-xs text-slate-300">
-            <div class="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-start gap-3">
-                <i class="fa-solid fa-triangle-exclamation text-amber-400 text-base mt-0.5"></i>
-                <div>
-                    <strong class="text-amber-300 block mb-0.5">PENTING:</strong>
-                    <span>Saat meminta data di Instagram, pastikan Anda memilih format <strong class="text-amber-200">JSON</strong> (bukan HTML) agar file dapat dibaca oleh sistem.</span>
-                </div>
+                <button onclick="closeGuideModal()" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
 
-            <ol class="space-y-3">
-                <li class="p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl flex items-start gap-3">
-                    <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold shrink-0">1</span>
-                    <div>Buka aplikasi <strong>Instagram</strong> <i class="fa-solid fa-arrow-right text-xs text-pink-500 mx-1"></i> masuk ke profil Anda <i class="fa-solid fa-arrow-right text-xs text-pink-500 mx-1"></i> ketuk <strong>Menu (Ikon 3 Garis)</strong> di pojok kanan atas.</div>
-                </li>
-                <li class="p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl flex items-start gap-3">
-                    <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold shrink-0">2</span>
-                    <div>Pilih <strong>Pusat Akun (Accounts Center)</strong>.</div>
-                </li>
-                <li class="p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl flex items-start gap-3">
-                    <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold shrink-0">3</span>
-                    <div>Pilih <strong>Informasi dan izin Anda (Your information and permissions)</strong>.</div>
-                </li>
-                <li class="p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl flex items-start gap-3">
-                    <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold shrink-0">4</span>
-                    <div>Klik <strong>Unduh informasi Anda (Download your information)</strong> <i class="fa-solid fa-arrow-right text-xs text-pink-500 mx-1"></i> pilih <strong>Unduh atau transfer informasi</strong>.</div>
-                </li>
-                <li class="p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl flex items-start gap-3">
-                    <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold shrink-0">5</span>
-                    <div>Pilih akun Instagram Anda <i class="fa-solid fa-arrow-right text-xs text-pink-500 mx-1"></i> ketuk <strong>Sebagian informasi (Some of your information)</strong>.</div>
-                </li>
-                <li class="p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl flex items-start gap-3">
-                    <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold shrink-0">6</span>
-                    <div>Centang kategori <strong>Pengikut dan Mengikuti (Followers and following)</strong> <i class="fa-solid fa-arrow-right text-xs text-pink-500 mx-1"></i> klik <strong>Berikutnya</strong>.</div>
-                </li>
-                <li class="p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl flex items-start gap-3">
-                    <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold shrink-0">7</span>
-                    <div>Pilih <strong>Unduh ke perangkat</strong>, atur Format ke <strong>JSON</strong>, lalu klik <strong>Buat file</strong>.</div>
-                </li>
-            </ol>
-        </div>
+            <!-- Modal Content (Scrollable) -->
+            <div class="p-6 overflow-y-auto space-y-4 text-xs text-slate-300">
+                <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex gap-3 items-start">
+                    <i class="fa-solid fa-circle-exclamation text-amber-400 text-base mt-0.5"></i>
+                    <p class="text-amber-200/90 leading-relaxed">
+                        <strong>PENTING:</strong> Saat meminta data di Instagram, pastikan Anda memilih format <strong class="text-amber-300 underline">JSON</strong> (bukan HTML) agar file dapat dibaca oleh sistem.
+                    </p>
+                </div>
 
-        <!-- Footer Modal -->
-        <div class="p-4 border-t border-slate-800/80 bg-slate-950/50 text-right">
-            <button onclick="toggleGuideModal(false)" class="px-5 py-2 text-xs font-semibold bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-xl shadow-md transition-all">
-                Saya Mengerti
-            </button>
+                <ol class="space-y-3 font-normal list-decimal list-inside text-slate-300">
+                    <li class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+                        Buka aplikasi <strong>Instagram</strong> $\rightarrow$ masuk ke profil Anda $\rightarrow$ ketuk <strong>Menu (Ikon 3 Garis)</strong> di pojok kanan atas.
+                    </li>
+                    <li class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+                        Pilih <strong>Pusat Akun (Accounts Center)</strong>.
+                    </li>
+                    <li class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+                        Pilih <strong>Informasi dan izin Anda (Your information and permissions)</strong>.
+                    </li>
+                    <li class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+                        Klik <strong>Unduh informasi Anda (Download your information)</strong> $\rightarrow$ pilih <strong>Unduh atau transfer informasi</strong>.
+                    </li>
+                    <li class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+                        Pilih akun Instagram Anda $\rightarrow$ ketuk <strong>Sebagian informasi (Some of your information)</strong>.
+                    </li>
+                    <li class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+                        Centang kategori <strong>Pengikut dan Mengikuti (Followers and following)</strong> $\rightarrow$ klik <strong>Berikutnya</strong>.
+                    </li>
+                    <li class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+                        Pilih <strong>Unduh ke perangkat (Download to device)</strong>.
+                    </li>
+                    <li class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+                        Atur Konfigurasi:
+                        <ul class="list-disc list-inside mt-2 ml-4 space-y-1 text-slate-400">
+                            <li>Rentang tanggal: <strong class="text-slate-200">Sepanjang waktu (All time)</strong></li>
+                            <li>Format: <strong class="text-pink-400">JSON</strong></li>
+                        </ul>
+                    </li>
+                    <li class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+                        Klik <strong>Buat file</strong>. Tunggu notifikasi/email dari Instagram, lalu unduh dan ekstrak file ZIP-nya.
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-end">
+                <button onclick="closeGuideModal()" class="px-5 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-medium rounded-xl hover:opacity-90 transition-all text-xs">
+                    Saya Mengerti
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Notification Toast -->
     <div id="toast" class="fixed bottom-6 right-6 translate-y-20 opacity-0 transition-all duration-300 z-50 bg-slate-900 border border-slate-700 text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
