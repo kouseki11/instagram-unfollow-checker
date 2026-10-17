@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Unfollower Radar & Analytics</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf2f8',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #090d16; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-pink-500 selection:text-white">
+
+    <!-- Glowing Background Effect -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-80 bg-gradient-to-r from-violet-600/20 via-pink-600/20 to-amber-600/20 blur-3xl pointer-events-none -z-10"></div>
+
+    <!-- Header / Navbar -->
+    <header class="border-b border-slate-800/80 bg-slate-900/70 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-0.5 shadow-lg shadow-pink-500/20">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                        <i class="fa-brands fa-instagram text-xl text-transparent bg-clip-text bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-500 font-bold"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">Unfollower Radar</h1>
+                    <p class="text-xs text-slate-400">100% Client-Side Instagram Analytics</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2">
+                <button onclick="scrollToUploader()" class="px-3.5 py-2 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl border border-slate-700/60 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-pink-400"></i>
+                    <span>Unggah JSON</span>
+                </button>
+                <button onclick="exportToCSV()" class="px-3.5 py-2 text-xs font-medium bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-xl shadow-md shadow-pink-600/20 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Export CSV</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- File Upload Section -->
+        <section id="uploaderSection" class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 backdrop-blur-md relative overflow-hidden">
+            <div class="max-w-3xl mx-auto text-center space-y-3 mb-6">
+                <span class="px-3 py-1 bg-pink-500/10 text-pink-400 border border-pink-500/20 rounded-full text-xs font-semibold uppercase tracking-wider">Aman & Privat</span>
+                <h2 class="text-2xl font-bold text-slate-100">Unggah File Export Instagram Anda</h2>
+                <p class="text-sm text-slate-400">
+                    File Anda diproses <strong class="text-slate-200">langsung di browser (JS murni)</strong> dan tidak pernah diunggah ke server mana pun.
+                </p>
+            </div>
+
+            <!-- Upload Zone Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dropzone Followers -->
+                <div class="relative group">
+                    <input type="file" id="followersFileInput" accept=".json" onchange="handleFileSelect(event, 'followers')" class="hidden">
+                    <label for="followersFileInput" id="followersDropzone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event, 'followers')" ondrop="handleDrop(event, 'followers')" class="flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-700 hover:border-pink-500/60 bg-slate-950/50 hover:bg-slate-950/80 rounded-2xl cursor-pointer transition-all duration-200 text-center h-44">
+                        <div id="followersStatusIcon" class="w-12 h-12 rounded-xl bg-slate-800 text-slate-400 group-hover:text-pink-400 flex items-center justify-center text-xl mb-2 transition-colors">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span id="followersStatusText" class="text-xs font-semibold text-slate-300">Unggah followers_1.json</span>
+                        <span id="followersSubText" class="text-[11px] text-slate-500 mt-1">Klik atau drag & drop file di sini</span>
+                    </label>
+                </div>
+
+                <!-- Dropzone Following -->
+                <div class="relative group">
+                    <input type="file" id="followingFileInput" accept=".json" onchange="handleFileSelect(event, 'following')" class="hidden">
+                    <label for="followingFileInput" id="followingDropzone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event, 'following')" ondrop="handleDrop(event, 'following')" class="flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-700 hover:border-purple-500/60 bg-slate-950/50 hover:bg-slate-950/80 rounded-2xl cursor-pointer transition-all duration-200 text-center h-44">
+                        <div id="followingStatusIcon" class="w-12 h-12 rounded-xl bg-slate-800 text-slate-400 group-hover:text-purple-400 flex items-center justify-center text-xl mb-2 transition-colors">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+                        <span id="followingStatusText" class="text-xs font-semibold text-slate-300">Unggah following.json</span>
+                        <span id="followingSubText" class="text-[11px] text-slate-500 mt-1">Klik atau drag & drop file di sini</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Reset Button -->
+            <div id="resetContainer" class="hidden mt-6 text-center border-t border-slate-800/80 pt-4 flex justify-between items-center">
+                <span class="text-xs text-slate-400">Ingin menganalisis data akun lain?</span>
+                <button onclick="resetAllData()" class="text-xs font-semibold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 px-4 py-2 rounded-xl transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>Reset Data & Unggah Ulang</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Stats Overview Cards -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Following -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 backdrop-blur-sm relative overflow-hidden">
+                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Following</p>
+                <h3 id="statFollowing" class="text-2xl sm:text-3xl font-bold text-slate-100 mt-1">0</h3>
+                <p class="text-[11px] text-slate-500 mt-2">Diikuti oleh Anda</p>
+                <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500/40"></div>
+            </div>
+
+            <!-- Followers -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 backdrop-blur-sm relative overflow-hidden">
+                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Followers</p>
+                <h3 id="statFollowers" class="text-2xl sm:text-3xl font-bold text-slate-100 mt-1">0</h3>
+                <p class="text-[11px] text-slate-500 mt-2">Mengikuti Anda</p>
+                <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500/40"></div>
+            </div>
+
+            <!-- Not Following Back -->
+            <div class="bg-slate-900/80 border border-pink-500/30 rounded-2xl p-4 sm:p-5 backdrop-blur-sm relative overflow-hidden shadow-lg shadow-pink-950/20">
+                <p class="text-xs font-semibold text-pink-400 uppercase tracking-wider">Tidak Follback</p>
+                <h3 id="statUnfollowers" class="text-2xl sm:text-3xl font-bold text-white mt-1">0</h3>
+                <p class="text-[11px] text-pink-300/70 mt-2">Bisa di-unfollow</p>
+                <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600"></div>
+            </div>
+
+            <!-- Mutual -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 backdrop-blur-sm relative overflow-hidden">
+                <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Mutual Follow</p>
+                <h3 id="statMutual" class="text-2xl sm:text-3xl font-bold text-slate-100 mt-1">0</h3>
+                <p class="text-[11px] text-slate-500 mt-2">Saling Mengikuti</p>
+                <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500/40"></div>
+            </div>
+        </section>
+
+        <!-- Controls (Tabs, Search, Sort) -->
+        <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 backdrop-blur-sm space-y-4">
+            <div class="flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center">
+                
+                <!-- Filter Tabs -->
+                <div class="flex p-1 bg-slate-950 border border-slate-800 rounded-xl overflow-x-auto">
+                    <button id="tabNotFollback" onclick="setTab('not_follback')" class="flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold rounded-lg transition-all text-white bg-gradient-to-r from-pink-600 to-purple-600 shadow-sm flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-user-xmark"></i>
+                        <span>Tidak Follback</span>
+                    </button>
+                    <button id="tabFans" onclick="setTab('fans')" class="flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold text-slate-400 hover:text-slate-200 rounded-lg transition-all flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-heart text-rose-400"></i>
+                        <span>Fans (Penggemar)</span>
+                    </button>
+                    <button id="tabMutual" onclick="setTab('mutual')" class="flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold text-slate-400 hover:text-slate-200 rounded-lg transition-all flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-handshake text-purple-400"></i>
+                        <span>Mutual</span>
+                    </button>
+                </div>
+
+                <!-- Search & Sort Controls -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="searchInput" placeholder="Cari username..." oninput="handleSearch()" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500">
+                        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-xs">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Sort -->
+                    <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2">
+                        <i class="fa-solid fa-arrow-down-a-z text-slate-400 text-xs"></i>
+                        <select id="sortSelect" onchange="handleSort()" class="bg-transparent text-xs text-slate-200 font-medium focus:outline-none cursor-pointer">
+                            <option value="az" class="bg-slate-900">A - Z</option>
+                            <option value="za" class="bg-slate-900">Z - A</option>
+                            <option value="short" class="bg-slate-900">Terpendek</option>
+                            <option value="long" class="bg-slate-900">Terpanjang</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Result Count Status -->
+            <div class="flex justify-between items-center text-xs text-slate-400 pt-2 border-t border-slate-800/60">
+                <div>
+                    Menampilkan <span id="showingCount" class="text-slate-200 font-semibold">0</span> pengguna
+                </div>
+                <div id="unfollowedFilterCount" class="text-slate-500">
+                    Ditandai Unfollow: <span id="unfollowedCount" class="text-pink-400 font-medium">0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Grid -->
+        <section>
+            <!-- Empty State -->
+            <div id="emptyState" class="py-16 text-center bg-slate-900/40 border border-slate-800 rounded-2xl">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-800/80 flex items-center justify-center text-slate-500 text-2xl">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                </div>
+                <h3 id="emptyTitle" class="text-lg font-semibold text-slate-300">Belum Ada Data Disajikan</h3>
+                <p id="emptySub" class="text-xs text-slate-500 max-w-md mx-auto mt-1">Silakan unggah file <b>followers_1.json</b> dan <b>following.json</b> dari Instagram Anda di area unggah di atas.</p>
+            </div>
+
+            <!-- Cards Container -->
+            <div id="userGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- User cards will be rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- Pagination -->
+        <section id="paginationSection" class="hidden flex-col sm:flex-row justify-between items-center gap-4 bg-slate-900/60 border border-slate-800 rounded-2xl p-4 backdrop-blur-sm">
+            <div class="text-xs text-slate-400">
+                Halaman <span id="currentPageNum" class="text-slate-200 font-semibold">1</span> dari <span id="totalPagesNum" class="text-slate-200 font-semibold">1</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button id="prevPageBtn" onclick="changePage(-1)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 text-xs font-medium rounded-lg border border-slate-700/60 transition-all">
+                    <i class="fa-solid fa-chevron-left mr-1"></i> Sebelumnya
+                </button>
+                <div id="pageNumbersContainer" class="flex items-center gap-1 px-1"></div>
+                <button id="nextPageBtn" onclick="changePage(1)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 text-xs font-medium rounded-lg border border-slate-700/60 transition-all">
+                    Selanjutnya <i class="fa-solid fa-chevron-right ml-1"></i>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 translate-y-20 opacity-0 transition-all duration-300 z-50 bg-slate-900 border border-slate-700 text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+        <div id="toastIcon" class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastMessage" class="text-xs font-medium">Notifikasi</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500 mt-auto">
+        <p>Instagram Unfollower Radar &bull; Client-side Processing &bull; Ready for Vercel Deployment</p>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // Application Global State (KOSONG secara default)
+        let state = {
+            followers: [],
+            following: [],
+            unfollowersList: [], // Following - Followers
+            fansList: [],        // Followers - Following
+            mutualList: [],      // Followers & Following
+            unfollowedUsernames: new Set(), // Track local toggles
+            activeTab: 'not_follback',
+            searchQuery: '',
+            sortBy: 'az',
+            currentPage: 1,
+            pageSize: 24
+        };
+
+        // DOM Element references
+        const userGrid = document.getElementById('userGrid');
+        const emptyState = document.getElementById('emptyState');
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const showingCount = document.getElementById('showingCount');
+        const unfollowedCount = document.getElementById('unfollowedCount');
+        const currentPageNum = document.getElementById('currentPageNum');
+        const totalPagesNum = document.getElementById('totalPagesNum');
+        const prevPageBtn = document.getElementById('prevPageBtn');
+        const nextPageBtn = document.getElementById('nextPageBtn');
+        const pageNumbersContainer = document.getElementById('pageNumbersContainer');
+
+        // Extract IG Username logic helper (Supports official JSON formats)
+        function extractUsernamesFromJSON(jsonObj) {
+            let extracted = [];
+
+            try {
+                // Format 1: following.json -> { "relationships_following": [ { "string_list_data": [ { "value": "username" } ] } ] }
+                if (jsonObj.relationships_following && Array.isArray(jsonObj.relationships_following)) {
+                    jsonObj.relationships_following.forEach(item => {
+                        if (item.string_list_data && item.string_list_data.length > 0) {
+                            extracted.push(item.string_list_data[0].value || item.title);
+                        } else if (item.title) {
+                            extracted.push(item.title);
+                        }
+                    });
+                } 
+                // Format 2: followers_1.json -> [ { "string_list_data": [ { "value": "username" } ] } ]
+                else if (Array.isArray(jsonObj)) {
+                    jsonObj.forEach(item => {
+                        if (item.string_list_data && item.string_list_data.length > 0) {
+                            extracted.push(item.string_list_data[0].value || item.title);
+                        } else if (item.title) {
+                            extracted.push(item.title);
+                        } else if (typeof item === 'string') {
+                            extracted.push(item);
+                        }
+                    });
+                }
+                // Format 3: Direct key values array
+                else if (typeof jsonObj === 'object') {
+                    const possibleKeys = Object.keys(jsonObj);
+                    possibleKeys.forEach(k => {
+                        if (Array.isArray(jsonObj[k])) {
+                            extracted = extracted.concat(extractUsernamesFromJSON(jsonObj[k]));
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("Error parsing structure:", err);
+            }
+
+            // Filter out empty or duplicate entries
+            return [...new Set(extracted.filter(u => typeof u === 'string' && u.trim() !== ''))];
+        }
+
+        // Drag and Drop Event Handlers
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function handleDragLeave(e, type) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function handleDrop(e, type) {
+            e.preventDefault();
+            e.stopPropagation();
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                processFile(files[0], type);
+            }
+        }
+
+        function handleFileSelect(event, type) {
+            const file = event.target.files[0];
+            if (file) {
+                processFile(file, type);
+            }
+        }
+
+        // Process File with FileReader
+        function processFile(file, type) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    const usernames = extractUsernamesFromJSON(parsed);
+
+                    if (usernames.length === 0) {
+                        showToast(`Gagal membaca username dari ${file.name}. Pastikan file JSON resmi.`, false);
+                        return;
+                    }
+
+                    if (type === 'followers') {
+                        state.followers = usernames;
+                        updateUploadStatusUI('followersStatusText', 'followersStatusIcon', 'followersSubText', file.name, usernames.length, 'emerald');
+                    } else {
+                        state.following = usernames;
+                        updateUploadStatusUI('followingStatusText', 'followingStatusIcon', 'followingSubText', file.name, usernames.length, 'purple');
+                    }
+
+                    document.getElementById('resetContainer').classList.remove('hidden');
+                    showToast(`Berhasil memuat ${usernames.length} username dari ${file.name}`);
+                    recalculateData();
+
+                } catch (error) {
+                    showToast(`File ${file.name} bukan format JSON yang valid!`, false);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function updateUploadStatusUI(textId, iconId, subId, filename, count, color) {
+            document.getElementById(textId).textContent = filename;
+            document.getElementById(subId).textContent = `Dimuat: ${count} username`;
+            const iconEl = document.getElementById(iconId);
+            iconEl.className = `w-12 h-12 rounded-xl bg-${color}-500/20 text-${color}-400 flex items-center justify-center text-xl mb-2`;
+            iconEl.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        }
+
+        // Reset Data
+        function resetAllData() {
+            state.followers = [];
+            state.following = [];
+            state.unfollowersList = [];
+            state.fansList = [];
+            state.mutualList = [];
+            state.unfollowedUsernames.clear();
+
+            document.getElementById('followersFileInput').value = '';
+            document.getElementById('followingFileInput').value = '';
+
+            document.getElementById('followersStatusText').textContent = 'Unggah followers_1.json';
+            document.getElementById('followersSubText').textContent = 'Klik atau drag & drop file di sini';
+            document.getElementById('followersStatusIcon').className = 'w-12 h-12 rounded-xl bg-slate-800 text-slate-400 group-hover:text-pink-400 flex items-center justify-center text-xl mb-2 transition-colors';
+            document.getElementById('followersStatusIcon').innerHTML = '<i class="fa-solid fa-users"></i>';
+
+            document.getElementById('followingStatusText').textContent = 'Unggah following.json';
+            document.getElementById('followingSubText').textContent = 'Klik atau drag & drop file di sini';
+            document.getElementById('followingStatusIcon').className = 'w-12 h-12 rounded-xl bg-slate-800 text-slate-400 group-hover:text-purple-400 flex items-center justify-center text-xl mb-2 transition-colors';
+            document.getElementById('followingStatusIcon').innerHTML = '<i class="fa-solid fa-user-plus"></i>';
+
+            document.getElementById('resetContainer').classList.add('hidden');
+
+            recalculateData();
+            showToast('Seluruh data berhasil direset.');
+        }
+
+        // Process Sets comparison
+        function recalculateData() {
+            const followersSet = new Set(state.followers);
+            const followingSet = new Set(state.following);
+
+            // 1. Not Following Back = Following - Followers
+            state.unfollowersList = state.following.filter(u => !followersSet.has(u));
+
+            // 2. Fans = Followers - Following
+            state.fansList = state.followers.filter(u => !followingSet.has(u));
+
+            // 3. Mutual = Followers & Following
+            state.mutualList = state.following.filter(u => followersSet.has(u));
+
+            // Update Header Stats Overview
+            document.getElementById('statFollowing').textContent = state.following.length.toLocaleString('id-ID');
+            document.getElementById('statFollowers').textContent = state.followers.length.toLocaleString('id-ID');
+            document.getElementById('statUnfollowers').textContent = state.unfollowersList.length.toLocaleString('id-ID');
+            document.getElementById('statMutual').textContent = state.mutualList.length.toLocaleString('id-ID');
+
+            renderCurrentTab();
+        }
+
+        // Active Tab selection
+        function setTab(tabName) {
+            state.activeTab = tabName;
+            state.currentPage = 1;
+
+            const tabNotFollback = document.getElementById('tabNotFollback');
+            const tabFans = document.getElementById('tabFans');
+            const tabMutual = document.getElementById('tabMutual');
+
+            // Default inactive class
+            const inactiveClass = "flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold text-slate-400 hover:text-slate-200 rounded-lg transition-all flex items-center justify-center gap-1.5";
+            const activeClass = "flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold rounded-lg transition-all text-white bg-gradient-to-r from-pink-600 to-purple-600 shadow-sm flex items-center justify-center gap-1.5";
+
+            tabNotFollback.className = tabName === 'not_follback' ? activeClass : inactiveClass;
+            tabFans.className = tabName === 'fans' ? activeClass : inactiveClass;
+            tabMutual.className = tabName === 'mutual' ? activeClass : inactiveClass;
+
+            renderCurrentTab();
+        }
+
+        // Get list based on active tab
+        function getActiveList() {
+            switch (state.activeTab) {
+                case 'not_follback': return state.unfollowersList;
+                case 'fans': return state.fansList;
+                case 'mutual': return state.mutualList;
+                default: return state.unfollowersList;
+            }
+        }
+
+        // Render Cards with Filter & Sort
+        function renderCurrentTab() {
+            let list = [...getActiveList()];
+
+            // Filter Search Query
+            if (state.searchQuery) {
+                list = list.filter(u => u.toLowerCase().includes(state.searchQuery.toLowerCase()));
+            }
+
+            // Sort
+            switch (state.sortBy) {
+                case 'az': list.sort((a, b) => a.localeCompare(b)); break;
+                case 'za': list.sort((a, b) => b.localeCompare(a)); break;
+                case 'short': list.sort((a, b) => a.length - b.length || a.localeCompare(b)); break;
+                case 'long': list.sort((a, b) => b.length - a.length || a.localeCompare(b)); break;
+            }
+
+            const totalItems = list.length;
+            showingCount.textContent = totalItems;
+            unfollowedCount.textContent = state.unfollowedUsernames.size;
+
+            if (totalItems === 0) {
+                userGrid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                document.getElementById('paginationSection').classList.add('hidden');
+
+                if (state.followers.length === 0 && state.following.length === 0) {
+                    document.getElementById('emptyTitle').textContent = "Belum Ada Data Disajikan";
+                    document.getElementById('emptySub').textContent = "Silakan unggah file followers_1.json dan following.json dari Instagram Anda di area unggah di atas.";
+                } else {
+                    document.getElementById('emptyTitle').textContent = "Tidak Ada Data Ditemukan";
+                    document.getElementById('emptySub').textContent = "Coba ubah kata kunci pencarian atau ganti tab filter di atas.";
+                }
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            document.getElementById('paginationSection').classList.remove('hidden');
+
+            // Pagination calculation
+            const limit = state.pageSize;
+            const totalPages = Math.ceil(totalItems / limit) || 1;
+            if (state.currentPage > totalPages) state.currentPage = totalPages;
+
+            const start = (state.currentPage - 1) * limit;
+            const pageItems = list.slice(start, start + limit);
+
+            currentPageNum.textContent = state.currentPage;
+            totalPagesNum.textContent = totalPages;
+
+            prevPageBtn.disabled = state.currentPage === 1;
+            nextPageBtn.disabled = state.currentPage === totalPages;
+
+            renderPageNumbers(totalPages);
+
+            // Render User Cards
+            userGrid.innerHTML = pageItems.map(username => {
+                const profileUrl = `https://www.instagram.com/${username}/`;
+                const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(username.substring(0, 2))}&background=random&color=fff&bold=true`;
+                const isUnfollowed = state.unfollowedUsernames.has(username);
+
+                return `
+                <div class="bg-slate-900/80 border ${isUnfollowed ? 'border-pink-500/50 opacity-60' : 'border-slate-800 hover:border-slate-700'} rounded-2xl p-4 transition-all flex flex-col justify-between group">
+                    <div class="flex items-center gap-3 mb-3">
+                        <img src="${avatarUrl}" alt="${username}" class="w-10 h-10 rounded-xl object-cover ring-2 ring-slate-800">
+                        <div class="min-w-0 flex-1">
+                            <h4 class="font-bold text-slate-100 text-xs truncate group-hover:text-pink-400 transition-colors">
+                                @${username}
+                            </h4>
+                            <span class="text-[10px] text-slate-400">
+                                ${state.activeTab === 'not_follback' ? 'Tidak follback' : state.activeTab === 'fans' ? 'Penggemar Anda' : 'Mutual'}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-800/80 flex items-center gap-2">
+                        <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-[11px] py-1.5 px-2.5 rounded-lg transition-all text-center flex items-center justify-center gap-1">
+                            <span>Profil</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-70"></i>
+                        </a>
+                        <button onclick="toggleUnfollowStatus('${username}')" class="px-2.5 py-1.5 ${isUnfollowed ? 'bg-pink-500/20 text-pink-400 border border-pink-500/30' : 'bg-slate-800 text-slate-400 hover:text-slate-200'} rounded-lg transition-all text-[11px] font-medium" title="Tandai Sudah Unfollow">
+                            <i class="fa-solid ${isUnfollowed ? 'fa-check' : 'fa-user-minus'}"></i>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle local status "Sudah Unfollow"
+        function toggleUnfollowStatus(username) {
+            if (state.unfollowedUsernames.has(username)) {
+                state.unfollowedUsernames.delete(username);
+            } else {
+                state.unfollowedUsernames.add(username);
+            }
+            renderCurrentTab();
+        }
+
+        // Render Pagination buttons
+        function renderPageNumbers(totalPages) {
+            pageNumbersContainer.innerHTML = '';
+            if (totalPages <= 1) return;
+
+            for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+                const btn = document.createElement('button');
+                btn.className = `w-7 h-7 text-xs font-semibold rounded-lg transition-all ${i === state.currentPage ? 'bg-pink-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`;
+                btn.textContent = i;
+                btn.onclick = () => {
+                    state.currentPage = i;
+                    renderCurrentTab();
+                };
+                pageNumbersContainer.appendChild(btn);
+            }
+        }
+
+        // Filter / Search / Sort Handlers
+        function handleSearch() {
+            state.searchQuery = searchInput.value.trim();
+            if (state.searchQuery) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+            state.currentPage = 1;
+            renderCurrentTab();
+        }
+
+        function clearSearch() {
+            searchInput.value = '';
+            handleSearch();
+        }
+
+        function handleSort() {
+            state.sortBy = document.getElementById('sortSelect').value;
+            renderCurrentTab();
+        }
+
+        function changePage(direction) {
+            state.currentPage += direction;
+            renderCurrentTab();
+        }
+
+        function scrollToUploader() {
+            document.getElementById('uploaderSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Export active tab to CSV file
+        function exportToCSV() {
+            const list = getActiveList();
+            if (list.length === 0) {
+                showToast('Tidak ada data untuk diexport!', false);
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,No,Username,Instagram Profile URL\n";
+            list.forEach((username, index) => {
+                csvContent += `${index + 1},${username},https://www.instagram.com/${username}/\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `instagram_${state.activeTab}_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('File CSV berhasil diunduh!');
+        }
+
+        // Notification Toast
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMessage.textContent = message;
+            toastIcon.className = isSuccess 
+                ? "w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs"
+                : "w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center text-xs";
+            
+            toastIcon.innerHTML = isSuccess ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-exclamation"></i>';
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initial Load
+        window.addEventListener('DOMContentLoaded', () => {
+            recalculateData();
+        });
+    </script>
+</body>
+</html>
